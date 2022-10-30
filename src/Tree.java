@@ -8,6 +8,7 @@ public class Tree {
 	private double proportionCoupe;
 	//private Color[] tabC = {Color.RED, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE};
 	Vector<Color> TabC;
+	
 	public Tree(int _nbFeuille, double _minDC, Vector<Color> _TabC) {
 		nbFeuille = _nbFeuille;
 		minDimensionCoupe = _minDC;
