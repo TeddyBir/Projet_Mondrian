@@ -12,11 +12,11 @@ public class Node {
 	 * 
 	 * 
 	 */
-	public Node(double _w, double _h, double _x, double _y, double _memeCouleurProb) {
+	public Node(double _w, double _h, double _memeCouleurProb) {
 		this.w = _w;
 		this.h = _h;
-		this.x = _x;
-		this.y = _y;
+		this.x = 0;
+		this.y = 0;
 		this.memeCouleurProb = _memeCouleurProb;
 		this.left = null;
 		this.right = null;
@@ -39,6 +39,14 @@ public class Node {
 		this.col = _col;
 	}
 	
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
 	public void setLeft(Node left) {
 		this.left = left;
 	}
