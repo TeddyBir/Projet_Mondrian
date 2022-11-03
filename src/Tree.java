@@ -54,7 +54,7 @@ public class Tree {
 		}
 	}
 	
-	public void chooseDivision(Node r)
+	public char chooseDivision(Node r)
 	{
 		double prob = Math.random();
 		if(r.getCol() == Color.WHITE && r.getLeft() == null && r.getRight() == null) {
@@ -62,16 +62,19 @@ public class Tree {
 			while(r.getY() < r.getH() * proportionCoupe || r.getY() > r.getH() *(1-  proportionCoupe)) {
 				r.setY(r.getH()/(Math.random() * r.getH() - 1));
 			}
+			return 'x';
 		}else {
 			//Choose X or Y
 			if(prob <= r.getW()/(r.getH()+r.getW())) {
 				while(r.getX() < r.getW() * proportionCoupe || r.getX() > r.getW() *(1-  proportionCoupe)) {
 					r.setX(r.getX()/(Math.random() * r.getW() - 1));
 				}
+				return 'x';
 			}else {
 				while(r.getY() < r.getH() * proportionCoupe || r.getY() > r.getH() *(1-  proportionCoupe)) {
 					r.setY(r.getH()/(Math.random() * r.getH() - 1));
 				}
+				return 'y';
 				
 			}
 		}

@@ -65,4 +65,10 @@ public class Image
   public int height() {
     return image.getHeight();
   }
+  
+  public static void main(String []args) throws IOException {
+	  Image img = new Image(100,200);
+	  img.setRectangle(0, 10, 0, 20, Color.RED);
+	  img.save("test1.png");
+  }
 }
