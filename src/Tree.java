@@ -8,11 +8,13 @@ public class Tree {
 	private double proportionCoupe;
 	//private Color[] tabC = {Color.RED, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE};
 	Vector<Color> TabC;
+	Node r;
 	
-	public Tree(int _nbFeuille, double _minDC, double _proportionCoupe, Vector<Color> _TabC) {
+	public Tree(Node _r,int _nbFeuille, double _minDC,  double _proportionCoupe, Vector<Color> _TabC) {
 		nbFeuille = _nbFeuille;
 		minDimensionCoupe = _minDC;
 		TabC = _TabC;
+		r = _r;
 		proportionCoupe = _proportionCoupe;
 	}
 	
@@ -24,8 +26,8 @@ public class Tree {
 		if(Math.random() <= r.getMemeCouleurProb()) {
 			return r.getCol();
 		}else {
-			double i = Math.random() * TabC.capacity();
-			return TabC.get((int) i);
+			int i = (int) (Math.random() * (TabC.capacity()-1));
+			return TabC.get(i);
 		}
 	}
 	
@@ -59,20 +61,23 @@ public class Tree {
 		double prob = Math.random();
 		if(r.getCol() == Color.WHITE && r.getLeft() == null && r.getRight() == null) {
 			//If Y is out of the autorized cut zone then re-set Y
-			while(r.getY() < r.getH() * proportionCoupe || r.getY() > r.getH() *(1-  proportionCoupe)) {
-				r.setY(r.getH()/(Math.random() * r.getH() - 1));
+			r.setY(r.getH()/(Math.random() * (r.getH() - 1)));
+			while((r.getY() < r.getH() * proportionCoupe) || (r.getY() > r.getH() *(1-  proportionCoupe))) {
+				r.setY(r.getH()/(Math.random() * (r.getH() - 1)));
+				//System.out.print("oui");
 			}
-			return 'x';
+			return 'y';
 		}else {
 			//Choose X or Y
 			if(prob <= r.getW()/(r.getH()+r.getW())) {
 				while(r.getX() < r.getW() * proportionCoupe || r.getX() > r.getW() *(1-  proportionCoupe)) {
-					r.setX(r.getX()/(Math.random() * r.getW() - 1));
+					//System.out.print("oui");
+					r.setX(r.getX()/(Math.random() * (r.getW() - 1)));
 				}
 				return 'x';
 			}else {
 				while(r.getY() < r.getH() * proportionCoupe || r.getY() > r.getH() *(1-  proportionCoupe)) {
-					r.setY(r.getH()/(Math.random() * r.getH() - 1));
+					r.setY(r.getH()/(Math.random() * (r.getH() - 1)));
 				}
 				return 'y';
 				
@@ -102,5 +107,11 @@ public class Tree {
 
 	public Vector<Color> getTabC() {
 		return TabC;
+	}
+
+
+	public Node getRoot() {
+		// TODO Auto-generated method stub
+		return r;
 	}
 }

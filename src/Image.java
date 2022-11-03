@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -66,9 +67,28 @@ public class Image
     return image.getHeight();
   }
   
-  public static void main(String []args) throws IOException {
-	  Image img = new Image(100,200);
+  public static void main(String[] args) {
+	 /* Image img = new Image(100,200);
 	  img.setRectangle(0, 10, 0, 20, Color.RED);
-	  img.save("test1.png");
+	  img.save("test1.png");*/
+	  
+	//private Color[] tabC = {Color.RED, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE};
+	  Vector<Color> tabC = new Vector<Color>();
+	    tabC.add(Color.RED);
+	    tabC.add(Color.BLUE);
+	    tabC.add(Color.YELLOW);
+	    tabC.add(Color.BLACK);
+	    tabC.add(Color.WHITE);
+	    
+	    Node R = new Node(100,100,0.6);
+
+	    Tree tr = new Tree(R,3,30,0.2,tabC);
+	    System.out.println(tr.getRoot().getY());
+	    tr.chooseDivision(R);
+	   //tr.getRoot().setLeft(new Node(20,20,0,0,0.6, tr.chooseColor(R)));
+	    //tr.getRoot().setRight(new Node(20,20,0,50,0.6, tr.chooseColor(R)));
+	    System.out.println(tr.getRoot().getY());
+	    //System.out.println(tr.getRoot().getLeft().getCol());
+	  
   }
 }
