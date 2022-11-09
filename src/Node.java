@@ -7,6 +7,7 @@ public class Node {
 	private Node right;
 	private Color col;
 	private double memeCouleurProb;
+	private boolean choosenDiv_X;
 	
 	/* Construction of the root node
 	 * 
@@ -37,8 +38,17 @@ public class Node {
 		this.right = null;
 		this.weight = (w*h)/Math.pow((w+h),1.5);
 		this.col = _col;
+		this.choosenDiv_X = true;
 	}
 	
+	public boolean isChoosenDiv_X() {
+		return choosenDiv_X;
+	}
+
+	public void setChoosenDiv_X(boolean choosenDiv_X) {
+		this.choosenDiv_X = choosenDiv_X;
+	}
+
 	public void setX(double x) {
 		this.x = x;
 	}
