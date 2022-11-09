@@ -26,7 +26,7 @@ public class Tree {
 		if(Math.random() <= r.getMemeCouleurProb()) {
 			return r.getCol();
 		}else {
-			int i = (int) (Math.random() * (TabC.capacity()-1));
+			int i = (int) (Math.random() * (TabC.size()-1));
 			return TabC.get(i);
 		}
 	}
@@ -63,7 +63,7 @@ public class Tree {
 		if(r.getCol() == Color.WHITE && r.getLeft() == null && r.getRight() == null) {
 			//If Y is out of the autorized cut zone then re-set Y
 			div = r.getH()/(Math.random() * (r.getH() - 1));
-			while((r.getY() < r.getH() * proportionCoupe) || (r.getY() > r.getH() *(1-  proportionCoupe))) {
+			while((div < r.getH() * proportionCoupe) || (div > r.getH() *(1-  proportionCoupe))) {
 				div = r.getH()/(Math.random() * (r.getH() - 1));
 				r.setChoosenDiv_X(false);
 				//System.out.print("oui");
@@ -71,15 +71,17 @@ public class Tree {
 			
 		}else {
 			//Choose X or Y
+			div = r.getH()/(Math.random() * (r.getH() - 1));
 			if(prob <= r.getW()/(r.getH()+r.getW())) {
-				while(r.getX() < r.getW() * proportionCoupe || r.getX() > r.getW() *(1-  proportionCoupe)) {
+
+				while(div < r.getW() * proportionCoupe || div > r.getW() *(1-  proportionCoupe)) {
 					//System.out.print("oui");
 					div = r.getX()/(Math.random() * (r.getW() - 1));
 					r.setChoosenDiv_X(true);
 				}
 			
 			}else {
-				while(r.getY() < r.getH() * proportionCoupe || r.getY() > r.getH() *(1-  proportionCoupe)) {
+				while(div < r.getH() * proportionCoupe || div > r.getH() *(1-  proportionCoupe)) {
 					div = r.getH()/(Math.random() * (r.getH() - 1));
 					r.setChoosenDiv_X(false);
 				}
@@ -94,25 +96,40 @@ public class Tree {
 
 	  int nbFeuilleCourant = 0;
 	  public void generateRandomTree(Node r) {
-	    // numberOfLeaves reach the treshold or the dimension of the region is not big enough
+		
+
+		// numberOfLeaves reach the treshold or the dimension of the region is not big enough
 	    if(nbFeuilleCourant == nbFeuille|| minDimensionCoupe > r.getH()*r.getW()) {
-	      return;
+			return;
+	      
 	    } else {
+		
 	      Node l = chooseLeaf(r); 
 	      double div = chooseDivision(l);
-	      // TODO: créer les deux nouvelles feuilles en fonction des coordonnées et de la couleurs obtenues avant
+	      // TODO: Probleme de boucle infini qui bloque 1 fois sur 2 le code
 	      if (!l.isChoosenDiv_X()) {
-	    	  l.setLeft(new Node(l.getW(), l.getY() + div, l.getX(), div, l.getMemeCouleurProb(), chooseColor(r.getLeft())));
-		      l.setRight(new Node(l.getW(),l.getH() - div, l.getX(), div ,l.getMemeCouleurProb() , chooseColor(r.getRight())));
+			
+	    	  l.setLeft(new Node(l.getW(), l.getY() + div, l.getX(), div, l.getMemeCouleurProb(), chooseColor(l)));
+		      l.setRight(new Node(l.getW(),l.getH() - div, l.getX(), div ,l.getMemeCouleurProb() , chooseColor(l)));
 	      }else {
-	    	  
+	    	  l.setLeft(new Node(l.getX() + div, l.getH(),div, l.getY(), l.getMemeCouleurProb(), chooseColor(l) ));
+			  l.setRight(new Node(l.getW() - div, l.getH(), div, l.getY(), l.getMemeCouleurProb(), chooseColor(l)));
 	      }
 	     // r.setLeft(new Node(r.getX(), h, x, y, memeCouleurProb, chooseColor(r.getLeft())));
 	     // r.setRight(new Node(memeCouleurProb, memeCouleurProb, memeCouleurProb, memeCouleurProb, memeCouleurProb, chooseColor(r.getRight()))); 
 	      nbFeuilleCourant += 2;
-	      generateRandomTree(r.getLeft());
-	      generateRandomTree(r.getRight());
+		  if (nbFeuilleCourant > nbFeuille){
+			l.setRight(null);
+			nbFeuilleCourant-=1;
+		  }else{
+			generateRandomTree(r.getLeft());
+	      	generateRandomTree(r.getRight());
+			
+		  }
+		  
+	      
 	    }
+		System.out.print(nbFeuilleCourant);
 	  }
 	
 	public Node addLeaf(Node r, char c) {
