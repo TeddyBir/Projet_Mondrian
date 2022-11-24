@@ -6,39 +6,44 @@ public class Node {
 	private Node left;
 	private Node right;
 	private Color col;
-	private double memeCouleurProb;
 	private boolean choosenDiv_X;
+  private boolean isDivided;
 	
 	/* Construction of the root node
 	 * 
 	 * 
 	 */
-	public Node(double _w, double _h, double _memeCouleurProb) {
+
+
+  
+	public Node(double _w, double _h) {
 		this.w = _w;
 		this.h = _h;
 		this.x = 0;
 		this.y = 0;
-		this.memeCouleurProb = _memeCouleurProb;
 		this.left = null;
 		this.right = null;
 		this.weight = (w*h)/Math.pow((w+h),1.5);
 		this.col = Color.WHITE;
-	}
+    this.choosenDiv_X = false;
+    this.isDivided = false;
+  }
+
 	
 	/*
 	 * Construction of a node
 	 */
-	public Node(double _w, double _h, double _x, double _y, double _memeCouleurProb, Color _col) {
+	public Node(double _w, double _h, double _x, double _y, Color _col) {
 		this.w = _w;
 		this.h = _h;
 		this.x = _x;
 		this.y = _y;
-		this.memeCouleurProb = _memeCouleurProb;
 		this.left = null;
 		this.right = null;
-		this.weight = (w*h)/Math.pow((w+h),1.5);
+		this.weight = (w*h)/(Math.pow((w+h),1.5));
 		this.col = _col;
 		this.choosenDiv_X = true;
+		this.isDivided = false;
 	}
 	
 	public boolean isChoosenDiv_X() {
@@ -97,9 +102,15 @@ public class Node {
 		return col;
 	}
 
-	public double getMemeCouleurProb() {
-		return memeCouleurProb;
-	}
 	
+	public boolean getIsDivided(){
+    return isDivided;
+    }
+
+  public void setIsDivided(boolean b){
+    isDivided = b;
+    }
+
+    
 	
 }

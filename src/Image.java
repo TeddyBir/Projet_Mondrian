@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.util.Vector;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-
+import java.util.Vector;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Scanner;
 /**
  * Helper class to create, modify and save images.
  * @author Mathieu Vavrille
@@ -67,28 +70,60 @@ public class Image
     return image.getHeight();
   }
   
-  public static void main(String[] args) {
-	 /* Image img = new Image(100,200);
-	  img.setRectangle(0, 10, 0, 20, Color.RED);
-	  img.save("test1.png");*/
-	  
-	//private Color[] tabC = {Color.RED, Color.BLUE, Color.YELLOW, Color.BLACK, Color.WHITE};
-	  Vector<Color> tabC = new Vector<Color>();
+  
+  public void toImage(Node r, Tree a) {
+    
+  if(r.getLeft() == null && r.getRight() == null){
+    setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()),r.getCol());
+    /////////////////////////GRAY///////////////////////////////
+    //Upper side
+    setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)(r.getY()),(int)(r.getY()+(a.getlargeurLigne()/2)), Color.GRAY);
+    //Left side
+    setRectangle((int)r.getX(),(int)(r.getX()+((a.getlargeurLigne()/2))), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
+    //Right side
+    setRectangle((int)((r.getX()+r.getW())-(a.getlargeurLigne()/2)),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
+    //Lower side
+    setRectangle((int)((r.getX()+r.getW())-(a.getlargeurLigne()/2)),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()),Color.GRAY);
+    
+  }else{
+    toImage(r.getLeft(), a);
+    toImage(r.getRight(),a);
+  }
+  
+}
+  
+  @SuppressWarnings("resource")
+public static void main(String[] args) throws IOException {
+	    /*
+	     * Image img = new Image(100,200);
+	     * img.setRectangle(0, 10, 0, 20, Color.RED);
+	     * img.save("test1.png");
+	     */
+
+	    // private Color[] tabC = {Color.RED, Color.BLUE, Color.YELLOW, Color.BLACK,
+	    // Color.WHITE};
+	    Vector<Color> tabC = new Vector<Color>();
 	    tabC.add(Color.RED);
 	    tabC.add(Color.BLUE);
 	    tabC.add(Color.YELLOW);
 	    tabC.add(Color.BLACK);
 	    tabC.add(Color.WHITE);
+	    int seed;
+	    System.out.print("Donnez un seed :");
+	    Scanner s = new Scanner(System.in);
+	    seed = s.nextInt();
+	    Random r = new Random(seed);
+	    Node R = new Node(1400, 1400);
+	    Tree tr = new Tree(R, 50, 0.1, 50, 0.5, 15,tabC, r);
+	    System.out.print("Double random : " + r + "\n");
+	    tr.generateRandomTree(tr.getRoot());
 	    
-	    Node R = new Node(100,100,0.6);
+	    
+	    Image img = new Image((int)tr.getRoot().getW(), (int)tr.getRoot().getH());
+	    //tr.print(tr.getRoot());
+	    img.toImage(R, tr);
+	    img.save("test.png");
+	    
 
-	    Tree tr = new Tree(R,3,30,0.2,tabC);
-	    System.out.println(tr.getRoot().getY());
-	    tr.chooseDivision(R);
-	   //tr.getRoot().setLeft(new Node(20,20,0,0,0.6, tr.chooseColor(R)));
-	    //tr.getRoot().setRight(new Node(20,20,0,50,0.6, tr.chooseColor(R)));
-	    System.out.println(tr.getRoot().getY());
-	    //System.out.println(tr.getRoot().getLeft().getCol());
-	  
-  }
+	  }
 }
