@@ -109,21 +109,38 @@ public static void main(String[] args) throws IOException {
 	    tabC.add(Color.BLACK);
 	    tabC.add(Color.WHITE);
 	    int seed;
-	    System.out.print("Donnez un seed :");
-	    Scanner s = new Scanner(System.in);
-	    seed = s.nextInt();
-	    Random r = new Random(seed);
+    
 	    Node R = new Node(1400, 1400);
-	    Tree tr = new Tree(R, 50, 0.1, 50, 0.5, 15,tabC, r);
-	    System.out.print("Double random : " + r + "\n");
-	    tr.generateRandomTree(tr.getRoot());
-	    
-	    
-	    Image img = new Image((int)tr.getRoot().getW(), (int)tr.getRoot().getH());
-	    //tr.print(tr.getRoot());
-	    img.toImage(R, tr);
-	    img.save("test.png");
-	    
-
-	  }
+    
+	    System.out.println("Voulez vous utilisez un seed ? (oui/non)");
+	    Scanner useSeed = new Scanner(System.in);
+	    String b = useSeed.nextLine();
+	    switch(b) {
+	    case "oui":
+	    	System.out.print("Donnez un seed :");
+	 	    Scanner s = new Scanner(System.in);
+	 	    seed = s.nextInt();
+	 	    Random r = new Random(seed);
+	 	    Tree tr = new Tree(R, 50, 0.1, 50, 0.5, 15,tabC, r);
+	 	    NodeAvl na = new NodeAvl(R);
+	 	    AVL Tavl = new AVL(na);
+	 	    System.out.print("Double random : " + r + "\n");
+	 	    tr.generateRandomTree(tr.getRoot(), Tavl);
+	 	    Image img = new Image((int)tr.getRoot().getW(), (int)tr.getRoot().getH());
+		    img.toImage(R, tr);
+		    img.save("test.png");
+	 	    break;
+	    case "non":
+	 	    int seed2 = (int)(Math.random() * 100000);
+	 	    Random rr = new Random(seed2);
+	 	    Tree tr2 = new Tree(R, 50, 0.1, 50, 0.5, 15,tabC, rr);
+	 	    NodeAvl naa = new NodeAvl(R);
+	 	    AVL Tavll = new AVL(naa);
+	 	    tr2.generateRandomTree(tr2.getRoot(), Tavll);
+	 	    Image img2 = new Image((int)tr2.getRoot().getW(), (int)tr2.getRoot().getH());
+		    img2.toImage(R, tr2);
+		    img2.save("test.png");
+		    break;
+	    }
+}
 }

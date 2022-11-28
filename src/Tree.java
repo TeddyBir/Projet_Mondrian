@@ -45,18 +45,9 @@ public class Tree {
    * Comparison of right and left weight leaf to pick the heaviest for division
    */
 
-  public Node chooseLeaf(Node r) {
-    if (r.getLeft() == null && r.getRight() == null) {
-      return r;
-    } else {
-      Node ll = chooseLeaf(r.getLeft());
-      Node rr = chooseLeaf(r.getRight());
-      if (ll.getWeight() < rr.getWeight()) {
-        return rr;
-      } else {
-        return ll;
-      }
-    }
+  public NodeAvl chooseLeaf(AVL Avl) {
+	  NodeAvl temp = Avl.searchMax(Avl.getRoot());
+	  return temp;
   }
 
   public double chooseDivision(Node r) {
@@ -91,16 +82,6 @@ public class Tree {
     return div;
   }
 
-  /*
-   * int i = 0;
-   * public int compt(Node r) {
-   * if (isEmpty(r)) {
-   * return 0;
-   * }
-   * i = compt(r.getLeft());
-   * return i++;
-   * }
-   */
 
   // Count the number of leaf
   public int nbOfLeaves(Node r) {
@@ -111,11 +92,13 @@ public class Tree {
     }
   }
 
-  public void generateRandomTree(Node r) {
+  public void generateRandomTree(Node r, AVL tree) {
 
     // numberOfLeaves reach the treshold or the dimension of the region is not big
     // enough
-    Node l = chooseLeaf(r);
+    NodeAvl al = chooseLeaf(tree);
+    Node l = al.getN();
+    tree.setRoot(tree.deleteNode(l, tree.getRoot()));
     System.out.println(" Parents : x :" + l.getX() + " ,y :" + l.getY());
     if (nbOfLeaves(r) >= nbFeuille || minDimensionCoupe > l.getH() * l.getW()) {
       return;
@@ -127,22 +110,23 @@ public class Tree {
       if (l.isChoosenDiv_X()) {
 
         l.setLeft(new Node(div, l.getH(), l.getX(), l.getY(), chooseColor(l) ));
-        
+        tree.setRoot(tree.insertNode(l.getLeft(), tree.getRoot()));
         /*System.out.println( " LeftX ( x: " + (int)l.getLeft().getX() + ", y : "+(int)l.getLeft().getY()+ ", W/H : " + l.getLeft().getW() + "/" + l.getLeft().getH() + " Weight : " + l.getLeft().getWeight()) ;*/
         
         l.setRight(
             new Node(l.getW()- div, l.getH(), l.getX()+div, l.getY(), chooseColor(l)) );
+        tree.setRoot(tree.insertNode(l.getRight(), tree.getRoot()));
         
        /* System.out.println( " RightX ( x: " + (int)l.getRight().getX() + ", y : "+(int)l.getRight().getY() + ", W/H : " + l.getRight().getW() + "/" + l.getRight().getH()+ " Weight : " + l.getRight().getWeight()+"\n");*/
         
       } else {
         
         l.setLeft(new Node(l.getW(), div, l.getX(), l.getY(), chooseColor(l)));
-        
+        tree.setRoot(tree.insertNode(l.getLeft(), tree.getRoot()));
        /* System.out.println( " LeftY ( x: " + (int)l.getLeft().getX() + ", y : "+(int)l.getLeft().getY() + ", W/H : " + l.getLeft().getW() + "/" + l.getLeft().getH() + " Weight : " + l.getLeft().getWeight());*/
         
         l.setRight( new Node(l.getW(), l.getH() - div, l.getX(), l.getY()+div, chooseColor(l)) );
-        
+        tree.setRoot(tree.insertNode(l.getRight(), tree.getRoot()));
       /*  System.out.println( " RightY ( x: " + (int)l.getRight().getX() + ", y : "+(int)l.getRight().getY() + ", W/H : " + l.getRight().getW() + "/" + l.getRight().getH()+ " Weight : " + l.getRight().getWeight()+"\n");*/
       }
       
@@ -150,7 +134,7 @@ public class Tree {
         l.setRight(null);
 
       } else {
-        generateRandomTree(r);
+        generateRandomTree(r, tree);
       }
 
     }
