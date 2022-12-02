@@ -13,9 +13,6 @@ public class Node {
 	 * 
 	 * 
 	 */
-
-
-  
 	public Node(double _w, double _h) {
 		this.w = _w;
 		this.h = _h;

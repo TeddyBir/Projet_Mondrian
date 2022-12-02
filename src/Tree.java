@@ -3,6 +3,8 @@ import java.util.Random;
 import java.util.Vector;
 
 
+
+
 public class Tree {
   private int nbFeuille;
   private double minDimensionCoupe;
@@ -12,11 +14,11 @@ public class Tree {
   private Vector<Color> TabC;
   private Node r;
   private Random rand;
+  private Color[] tab = {Color.WHITE, Color.red, Color.black, Color.BLUE, Color.yellow};
 
-  public Tree(Node _r, int _nbFeuille, double _proportionCoupe, double _minDC, double _memeCouleurProb, double _largeurLigne, Vector<Color> _TabC, Random _rand) {
+  public Tree(Node _r, int _nbFeuille, double _proportionCoupe, double _minDC, double _memeCouleurProb, double _largeurLigne, Random _rand) {
     nbFeuille = _nbFeuille;
     minDimensionCoupe = _minDC;
-    TabC = _TabC;
     r = _r;
     proportionCoupe = _proportionCoupe;
     largeurLigne = _largeurLigne;
@@ -32,8 +34,8 @@ public class Tree {
     if (rand.nextDouble() <= getMemeCouleurProb()) {
       return r.getCol();
     } else {
-      int i = (int) (rand.nextDouble() * (TabC.size() - 1));
-      return TabC.get(i);
+      int i = (int) (rand.nextDouble() * (5));
+      return tab[i];
     }
   }
 
@@ -44,12 +46,14 @@ public class Tree {
   /*
    * Comparison of right and left weight leaf to pick the heaviest for division
    */
-
   public NodeAvl chooseLeaf(AVL Avl) {
 	  NodeAvl temp = Avl.searchMax(Avl.getRoot());
 	  return temp;
   }
 
+  /*
+   *Choose a division 
+   */
   public double chooseDivision(Node r) {
     double prob = rand.nextDouble();
     double div = 0;
@@ -83,7 +87,10 @@ public class Tree {
   }
 
 
-  // Count the number of leaf
+  /*
+   * Count the number of leaf
+   * 
+   */
   public int nbOfLeaves(Node r) {
     if (r.getRight() == null && r.getLeft() == null) {
       return 1;
@@ -92,6 +99,10 @@ public class Tree {
     }
   }
 
+  /*
+   * Generate a random tree
+   *
+   */
   public void generateRandomTree(Node r, AVL tree) {
 
     // numberOfLeaves reach the treshold or the dimension of the region is not big
@@ -99,7 +110,6 @@ public class Tree {
     NodeAvl al = chooseLeaf(tree);
     Node l = al.getN();
     tree.setRoot(tree.deleteNode(l, tree.getRoot()));
-    System.out.println(" Parents : x :" + l.getX() + " ,y :" + l.getY());
     if (nbOfLeaves(r) >= nbFeuille || minDimensionCoupe > l.getH() * l.getW()) {
       return;
 
@@ -111,23 +121,20 @@ public class Tree {
 
         l.setLeft(new Node(div, l.getH(), l.getX(), l.getY(), chooseColor(l) ));
         tree.setRoot(tree.insertNode(l.getLeft(), tree.getRoot()));
-        /*System.out.println( " LeftX ( x: " + (int)l.getLeft().getX() + ", y : "+(int)l.getLeft().getY()+ ", W/H : " + l.getLeft().getW() + "/" + l.getLeft().getH() + " Weight : " + l.getLeft().getWeight()) ;*/
         
         l.setRight(
             new Node(l.getW()- div, l.getH(), l.getX()+div, l.getY(), chooseColor(l)) );
         tree.setRoot(tree.insertNode(l.getRight(), tree.getRoot()));
-        
-       /* System.out.println( " RightX ( x: " + (int)l.getRight().getX() + ", y : "+(int)l.getRight().getY() + ", W/H : " + l.getRight().getW() + "/" + l.getRight().getH()+ " Weight : " + l.getRight().getWeight()+"\n");*/
+        generateRandomTree(r, tree);
         
       } else {
         
         l.setLeft(new Node(l.getW(), div, l.getX(), l.getY(), chooseColor(l)));
         tree.setRoot(tree.insertNode(l.getLeft(), tree.getRoot()));
-       /* System.out.println( " LeftY ( x: " + (int)l.getLeft().getX() + ", y : "+(int)l.getLeft().getY() + ", W/H : " + l.getLeft().getW() + "/" + l.getLeft().getH() + " Weight : " + l.getLeft().getWeight());*/
         
         l.setRight( new Node(l.getW(), l.getH() - div, l.getX(), l.getY()+div, chooseColor(l)) );
         tree.setRoot(tree.insertNode(l.getRight(), tree.getRoot()));
-      /*  System.out.println( " RightY ( x: " + (int)l.getRight().getX() + ", y : "+(int)l.getRight().getY() + ", W/H : " + l.getRight().getW() + "/" + l.getRight().getH()+ " Weight : " + l.getRight().getWeight()+"\n");*/
+        generateRandomTree(r, tree);
       }
       
       if (nbOfLeaves(r) > nbFeuille) {
@@ -141,7 +148,7 @@ public class Tree {
     
   }
 
-  
+  ///////////////////////////////////////////////////////////////////////////////
   public int getNbFeuille() {
     return nbFeuille;
   }
@@ -163,7 +170,6 @@ public class Tree {
   }
 
   public Node getRoot() {
-    
     return r;
   }
   public double getlargeurLigne(){

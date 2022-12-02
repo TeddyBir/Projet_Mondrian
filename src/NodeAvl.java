@@ -5,7 +5,7 @@ public class NodeAvl {
 	private NodeAvl left;
 	private NodeAvl right;
 	private int height;
-	//TODO Add, Delete, rotate(all)
+
 	public NodeAvl(Node _n) {
 			this.n = _n;
 			this.left = null;
@@ -13,7 +13,6 @@ public class NodeAvl {
 			this.height = 1;
 			
 	}
-	
 	public NodeAvl() {
 		this.n = null;
 		this.left = null;
@@ -40,7 +39,7 @@ public class NodeAvl {
 	public double getWeightN() {
 		return n.getWeight();
 	}
-	
+
 
 	public NodeAvl getLeft() {
 		return left;

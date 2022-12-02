@@ -73,24 +73,45 @@ public class Image
   
   public void toImage(Node r, Tree a) {
     
-  if(r.getLeft() == null && r.getRight() == null){
-    setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()),r.getCol());
-    /////////////////////////GRAY///////////////////////////////
-    //Upper side
-    setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)(r.getY()),(int)(r.getY()+(a.getlargeurLigne()/2)), Color.GRAY);
-    //Left side
-    setRectangle((int)r.getX(),(int)(r.getX()+((a.getlargeurLigne()/2))), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
-    //Right side
-    setRectangle((int)((r.getX()+r.getW())-(a.getlargeurLigne()/2)),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
-    //Lower side
-    setRectangle((int)((r.getX()+r.getW())-(a.getlargeurLigne()/2)),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()),Color.GRAY);
+    if(r.getLeft() == null && r.getRight() == null){
+      setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()),r.getCol());
+      /////////////////////////GRAY///////////////////////////////
+      //Upper side
+      setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)(r.getY()),(int)(r.getY()+(a.getlargeurLigne()/2)), Color.GRAY);
+      //Left side
+      setRectangle((int)r.getX(),(int)(r.getX()+((a.getlargeurLigne()/2))), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
+      //Right side
+      setRectangle((int)((r.getX()+r.getW())-(a.getlargeurLigne()/2)),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
+      //Lower side
+      setRectangle((int)((r.getX())),(int)(r.getX()+r.getW()), (int)((r.getY()+r.getH())-(a.getlargeurLigne()/2)),(int)(r.getY()+r.getH()),Color.GRAY);
+      
+    }else{
+      toImage(r.getLeft(), a);
+      toImage(r.getRight(),a);
+    }
     
-  }else{
-    toImage(r.getLeft(), a);
-    toImage(r.getRight(),a);
   }
-  
-}
+
+  public void toImageB(Node r, BetterTree a) {
+    
+    if(r.getLeft() == null && r.getRight() == null){
+      setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()),r.getCol());
+      /////////////////////////GRAY///////////////////////////////
+      //Upper side
+      setRectangle((int)r.getX(),(int)(r.getX()+r.getW()), (int)(r.getY()),(int)(r.getY()+(a.getlargeurLigne()/2)), Color.GRAY);
+      //Left side
+      setRectangle((int)r.getX(),(int)(r.getX()+((a.getlargeurLigne()/2))), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
+      //Right side
+      setRectangle((int)((r.getX()+r.getW())-(a.getlargeurLigne()/2)),(int)(r.getX()+r.getW()), (int)r.getY(),(int)(r.getY()+r.getH()), Color.GRAY);
+      //Lower side
+      setRectangle((int)((r.getX())),(int)(r.getX()+r.getW()), (int)((r.getY()+r.getH())-(a.getlargeurLigne()/2)),(int)(r.getY()+r.getH()),Color.GRAY);
+      
+    }else{
+      toImageB(r.getLeft(), a);
+      toImageB(r.getRight(),a);
+    }
+    
+  }
   
   @SuppressWarnings("resource")
 public static void main(String[] args) throws IOException {
@@ -100,46 +121,50 @@ public static void main(String[] args) throws IOException {
 	     * img.save("test1.png");
 	     */
 
-	    // private Color[] tabC = {Color.RED, Color.BLUE, Color.YELLOW, Color.BLACK,
-	    // Color.WHITE};
-	    Vector<Color> tabC = new Vector<Color>();
-	    tabC.add(Color.RED);
-	    tabC.add(Color.BLUE);
-	    tabC.add(Color.YELLOW);
-	    tabC.add(Color.BLACK);
-	    tabC.add(Color.WHITE);
-	    int seed;
-    
-	    Node R = new Node(1400, 1400);
-    
-	    System.out.println("Voulez vous utilisez un seed ? (oui/non)");
+      System.out.println("Veuillez choisir une largeur et hauteur");
+      Scanner Sw = new Scanner(System.in);
+      Scanner Sh = new Scanner(System.in);
+	    Node R = new Node(Sw.nextInt(), Sh.nextInt());
+      Image img = new Image((int) R.getW(), (int)R.getH());
+      
+	    System.out.println("Voulez vous utilisez la strategie par default ? (oui/non)");
 	    Scanner useSeed = new Scanner(System.in);
 	    String b = useSeed.nextLine();
+
 	    switch(b) {
 	    case "oui":
-	    	System.out.print("Donnez un seed :");
-	 	    Scanner s = new Scanner(System.in);
-	 	    seed = s.nextInt();
-	 	    Random r = new Random(seed);
-	 	    Tree tr = new Tree(R, 50, 0.1, 50, 0.5, 15,tabC, r);
-	 	    NodeAvl na = new NodeAvl(R);
-	 	    AVL Tavl = new AVL(na);
-	 	    System.out.print("Double random : " + r + "\n");
-	 	    tr.generateRandomTree(tr.getRoot(), Tavl);
-	 	    Image img = new Image((int)tr.getRoot().getW(), (int)tr.getRoot().getH());
-		    img.toImage(R, tr);
-		    img.save("test.png");
+        System.out.println("Voulez donnez dans l'ordre :(nbFeuilles, proportionCoupe, minDimensionCoupe, memeCouleurProb, largeurLigne) ");
+        Scanner nbf = new Scanner(System.in);
+        int nb= nbf.nextInt();
+        Scanner pc = new Scanner(System.in);
+        double dpc = pc.nextDouble();
+        Scanner mdc = new Scanner(System.in);
+        double dmdc = mdc.nextDouble();
+        Scanner mdb = new Scanner(System.in);
+        double dmdb = mdb.nextDouble();
+        Scanner ll = new Scanner(System.in);
+        double dll = ll.nextDouble();
+          System.out.println("Donnez un seed");
+          Scanner iseed = new Scanner(System.in);
+          strategy st = new strategy(R, nb,dpc,dmdc,dmdb, dll, new Random(iseed.nextInt()));
+          st.generate();
+          img.toImage(st.getTree().getRoot(), st.getTree());
+          img.save("Mondarian.png");
+         System.out.println("Nb leaf : "+st.getTree().nbOfLeaves(st.getTree().getRoot()));
 	 	    break;
 	    case "non":
-	 	    int seed2 = (int)(Math.random() * 100000);
-	 	    Random rr = new Random(seed2);
-	 	    Tree tr2 = new Tree(R, 50, 0.1, 50, 0.5, 15,tabC, rr);
-	 	    NodeAvl naa = new NodeAvl(R);
-	 	    AVL Tavll = new AVL(naa);
-	 	    tr2.generateRandomTree(tr2.getRoot(), Tavll);
-	 	    Image img2 = new Image((int)tr2.getRoot().getW(), (int)tr2.getRoot().getH());
-		    img2.toImage(R, tr2);
-		    img2.save("test.png");
+        System.out.println("Voulez donnez dans l'ordre :(nbFeuille, memeCouleurProb) ");
+        Scanner nbfb = new Scanner(System.in);
+        int nbb= nbfb.nextInt();
+        Scanner mcb = new Scanner(System.in);
+        double dmcb = mcb.nextDouble();
+        System.out.println("Donnez un seed");
+        Scanner iseedb = new Scanner(System.in);
+        strategy stb = new strategy(R, nbb,dmcb, new Random(iseedb.nextInt()));
+        stb.generateBetter();
+          img.toImageB(stb.getBetterTree().getRoot(), stb.getBetterTree());
+          img.save("Mondarian.png");
+         System.out.println("Nb leaf : "+stb.getBetterTree().nbOfLeaves(stb.getBetterTree().getRoot()));
 		    break;
 	    }
 }
